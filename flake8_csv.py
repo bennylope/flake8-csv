@@ -20,8 +20,8 @@ try:
 except ImportError:
     Tuple = None
 
-__author__ = 'Ben Lopatin'
-__license__ = 'MIT'
+__author__ = "Ben Lopatin"
+__license__ = "MIT"
 
 try:
     __version__ = get_distribution(__name__).version
@@ -37,31 +37,37 @@ category_clarity = "Clarity"
 category_compatibility = "Compatibility"
 
 
-error_classes = OrderedDict([
-    ("E722", category_bug),
-    ("C9", category_complexity),
-    ("W6", category_compatibility),
-    ("E7", category_clarity),
-    ("E9", category_bug),
-    ("F", category_bug),
-    ("E", category_style),
-    ("W", category_style),
-])
+error_classes = OrderedDict(
+    [
+        ("E722", category_bug),
+        ("C9", category_complexity),
+        ("W6", category_compatibility),
+        ("E7", category_clarity),
+        ("E9", category_bug),
+        ("F", category_bug),
+        ("E", category_style),
+        ("W", category_style),
+    ]
+)
 
 
 def error_category(error_code):
     for code in [error_code, error_code[:2], error_code[:1]]:
         try:
             return error_classes[code]
+
         except:
             continue
+
     return category_bug
 
 
 class CategorizedCSVFormatter(base.BaseFormatter):
     """Formatter for CSV reporting with categorization"""
 
-    columns = ["Category", "Code", "Description", "Filename", "Line", "Column", "Code context"]
+    columns = [
+        "Category", "Code", "Description", "Filename", "Line", "Column", "Code context"
+    ]
 
     def start(self):
         """Prepare the formatter to receive input.
@@ -69,9 +75,11 @@ class CategorizedCSVFormatter(base.BaseFormatter):
         This defaults to initializing :attr:`output_fd` if :attr:`filename`
         """
         if self.filename:
-            self.output_fd = open(self.filename, 'a')
+            self.output_fd = open(self.filename, "a")
 
-        self.csv_writer = csv.writer(self.output_fd or sys.stdout, quoting=csv.QUOTE_ALL)
+        self.csv_writer = csv.writer(
+            self.output_fd or sys.stdout, quoting=csv.QUOTE_ALL
+        )
         self.csv_writer.writerow(self.columns)
 
     def after_init(self):
@@ -82,7 +90,7 @@ class CategorizedCSVFormatter(base.BaseFormatter):
         return (
             error_category(error.code),
             error.code,  # code
-            error.text,  #descript
+            error.text,  # descript
             error.filename,  # filename
             error.line_number,  # line
             error.column_number,  # column

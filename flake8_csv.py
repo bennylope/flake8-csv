@@ -82,9 +82,6 @@ class CategorizedCSVFormatter(base.BaseFormatter):
         )
         self.csv_writer.writerow(self.columns)
 
-    def after_init(self):
-        sys.stdout.write(self.options)
-
     def format(self, error):
         # type: (Violation) -> Tuple
         return (
